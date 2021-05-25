@@ -1,0 +1,15 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: 01755d2f5952923f539d
+            client-secret: 308a5f0c723e3d0bda59e97386604a822ea7793d
+
+server:
+  port: 8082
+
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
