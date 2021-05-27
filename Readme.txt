@@ -198,7 +198,6 @@ JPQL and native sql query
 RestTemplate vs WebClient
 
 Swagger for documentation
-/home/shubham/Downloads/mongo/mongodb-linux-x86_64-ubuntu2004-4.4.6/bin
 
 Spring Security
 ------------------------------------------------------------------------------------------------------
@@ -271,3 +270,62 @@ So when our spring boot app register with fb twitter they send client id, client
 
 developers.facebook.com/apps login and then it will list your apps with OAuth Client, id, pwd
 developers.google.com
+------------------------------------------------------------------------------------------------------
+Redis
+
+Redis is an open source in-memory data structure store, used as a database, cache, and message broker
+Redis provides persistance as it stroes data in RAM as well as HD
+So Post call will be expensive as we have to store in cache as well as HD
+But Get calls will be fast and if our app mostly has Get calls(80% case) it is very good
+
+Redis/MemCache/AeroSpike
+
+Web App(Spring Boot) ------ Cache(RAM) ------ DB(MySQL) HD
+
+LRU - Lease Recently Used - by default redis uses LRU
+LFU - Lease Frequently Used
+
+Front end can directly interact with DB using firebase (no backend required)
+we can interact with redis through terminal or code(java or spring)
+https://redis.io/commands
+
+there are many redis client for every language
+https://redis.io/clients
+
+RedisTemplate in Spring
+
+Cache ideally should be used with static data (not changing everytime)
+Before storing data in cache we should serialize the data (so that others cannot read it easily)
+there are two types of keys : normal keys(Set,Get), hash keys(HSet,HGet)
+
+To avoid single point of failure and for scalability, we need clustering(Master-Slave architecture)
+While doing set in master-slave, we first set in master and then master propagates to slaves
+
+So our bottleneck becomes the master, say master can process only 100req/s then it becomes app limit
+So we ideally have multiple master slave system and use sharding technique(id 1-1000 on 1 master slaves, 2-2000 on 2nd master slave)
+
+so we use clustering in redis, with some duplication factor say 2, so same data will be there on 2 more redis server
+
+------------------------------------------------------------------------------------------------------
+Kafka
+
+Apache Kafka is an open-source distributed event streaming platform used for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications
+
+Mainly used as message queue (to create asynchronous api)
+
+SendMoney and SendMail can be async api's, it means we can first call sendmoney api and sendmail can be push to message queue like kafka.
+If both api are synchronous then it might take time to sendmail
+
+To get transaction history in excel, we can use kafka, we will give response to this api - sending to your mail, push the query to message queue and then in send via mail
+
+Message queue will have producer and consumer
+There can be multiple producers and consumers, Producer p1,p2 can produce topic1 type of messages and p3 topic2 messages
+Consumer c1 can subscribe to both topic1 and topic2
+
+ZooKeeper is used in distributed systems for service synchronization and as a naming registry.  When working with Apache Kafka, ZooKeeper is primarily used to track the status of nodes in the Kafka cluster and maintain a list of Kafka topics and messages
+
+https://kafka.apache.org/quickstart
+Heroku(by salesforce, free) can be used to deploy app instead of aws
+
+We can also use Profiles in Spring boot project so that dev prod test can point to different mysql,redis,kafka servers
+https://dzone.com/articles/spring-boot-profiles-1
